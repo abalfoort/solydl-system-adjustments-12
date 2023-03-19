@@ -1,0 +1,242 @@
+#!/bin/bash
+# postinst script 
+# see: dh_installdeb(1)
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+#
+
+# Set the name of the Plymouth theme
+PLYMOUTH_THEME='solydl-logo'
+
+function sed_append_sting {
+  PATTERN=$1
+  LINE=$2
+  FLE=$3
+
+  if [ -e $FLE ]; then
+    if grep -q "$PATTERN\s*$" "$FLE"; then
+      # Escape forward slashes
+      LINE=$(echo $LINE | sed 's/\//\\\//g')
+      sed -i -e "s/.*$PATTERN.*/$LINE/" "$FLE"
+    elif ! grep -q "$PATTERN" "$FLE"; then
+      echo $LINE >> "$FLE"
+    fi
+  fi
+}
+
+function install_root_files {
+    mkdir -p /root/.config/gtk-3.0
+    mkdir -p /root/.local/share
+    
+    if [ ! -e /root/.config/gtk-3.0/settings.ini ]; then
+        cp -f /usr/share/solydxk/root_files/.config/gtk-3.0/settings.ini /root/.config/gtk-3.0/
+    fi
+    if [ ! -e /root/.gtkrc-2.0 ]; then
+        cp -f /usr/share/solydxk/root_files/.gtkrc-2.0 /root/
+    fi
+}
+
+function adust_trigger_files {
+    # Desktop files
+    FLE='/usr/share/applications/xfce-wm-settings.desktop'
+    if [ -f "$FLE" ]; then
+        ! grep -q 'OnlyShowIn=LXQt;' "$FLE" && sed -i 's#OnlyShowIn=#OnlyShowIn=LXQt;#' "$FLE"
+        ! grep -q 'Categories=Qt;LXQt;' "$FLE" && sed -i 's#Categories=#Categories=Qt;LXQt;#' "$FLE"
+    fi
+    FLE='/usr/share/applications/xfce-wmtweaks-settings.desktop'
+    if [ -f "$FLE" ]; then
+        ! grep -q 'OnlyShowIn=LXQt;' "$FLE" && sed -i 's#OnlyShowIn=#OnlyShowIn=LXQt;#' "$FLE"
+        ! grep -q 'Categories=Qt;LXQt;' "$FLE" && sed -i 's#Categories=#Categories=Qt;LXQt;#' "$FLE"
+    fi
+    FLE='/usr/share/applications/qt5ct.desktop'
+    if [ -f "$FLE" ]; then
+        ! grep -q 'Categories=LXQt;' "$FLE" && sed -i 's#Categories=#Categories=LXQt;#' "$FLE"
+    fi
+    
+    # Ugly, but found no other way to show b/w icon in systray
+    FLE='/usr/share/icons/evolvere-2-blue/devices/24/drive-removable-media.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/devices/64/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/apps/64/system-software-installer.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/apps/16/system-software-update.svg"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/apps/24/system-software-update.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/apps/64/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/status/24/software-update-available.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/status/64/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/status/24/software-update-urgent.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/status/64/"
+    fi
+    
+    # These need to be colored
+    FLE='/usr/share/icons/evolvere-2-blue/places/64/folder-desktop.svg'
+    if [ -f "$FLE" ]; then
+        TRG='/usr/share/icons/evolvere-2-blue/places/24/user-desktop.svg'
+        if [ -e "$TRG" ]; then
+            rm "$TRG"
+        fi
+        cp -f "$FLE" "$TRG"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/apps/64/config-users.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/apps/16/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/status/64/blueman.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/status/16/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/places/64/user-desktop.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/places/16/"
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/places/24/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/apps/64/preferences-desktop-locale.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/apps/16/"
+    fi
+    FLE='/usr/share/icons/evolvere-2-blue/devices/64/input-mouse.svg'
+    if [ -f "$FLE" ]; then
+        cp -f "$FLE" "/usr/share/icons/evolvere-2-blue/devices/16/"
+    fi
+    
+    # Missing symlinks
+    FLE='/usr/share/icons/evolvere-2-blue/apps/16/preferences.svg'
+    if [ -f "$FLE" ]; then
+        ln -sf 'preferences.svg' '/usr/share/icons/evolvere-2-blue/apps/16/preferences-desktop.svg'
+    fi
+    
+    update-icon-caches /usr/share/icons/evolvere-2-blue
+}
+
+case "$1" in    
+  configure|reconfigure)    
+    # Configure LightDM
+    CONF='/etc/lightdm/lightdm-gtk-greeter.conf'
+    if [ -e '/etc/lightdm/lightdm-kde-greeter.conf' ]; then
+      CONF='/etc/lightdm/lightdm-kde-greeter.conf'
+    fi
+    if [ -e $CONF ]; then
+      if ! grep -q 'solydl-lightdmbg' $CONF; then
+        sed_append_sting 'background=' 'background=/usr/share/images/desktop-base/solydl-lightdmbg.png' $CONF
+        sed_append_sting 'theme-name=' 'theme-name=Breeze' $CONF
+        sed_append_sting 'icon-theme-name=' 'icon-theme-name=evolvere-2-blue' $CONF
+      fi
+      sed_append_sting 'default-user-image=' 'default-user-image=/usr/share/pixmaps/faces/user-generic.png' $CONF
+      sed_append_sting 'font-name=' 'font-name=Clear Sans 11' $CONF
+      sed_append_sting 'position=' 'position=60% 30%' $CONF
+      sed_append_sting 'transition-duration=' 'transition-duration=1000' $CONF
+      sed_append_sting 'user-background=' 'user-background=false' $CONF
+      sed_append_sting 'xft-antialias=' 'xft-antialias=true' $CONF
+      sed_append_sting 'xft-dpi=' 'xft-dpi=96' $CONF
+      sed_append_sting 'xft-hintstyle=' 'xft-hintstyle=slight' $CONF
+      sed_append_sting 'xft-rgba=' 'xft-rgba=rgb' $CONF
+      sed_append_sting 'show-indicators=' 'show-indicators=~host;~spacer;~session;~language;~a11y;~clock;~power;' $CONF
+      sed_append_sting 'show-clock=' 'show-clock=true' $CONF
+      sed_append_sting 'clock-format=' 'clock-format=%d %b, %H:%M' $CONF
+      sed -i 's/greybird-solydl/Breeze/' $CONF
+      sed -i 's/lightdmbg-flat/lightdmbg/g' $CONF
+    fi
+
+    CONF='/etc/lightdm/lightdm.conf'
+    if [ -e $CONF ]; then
+      sed -i 's/^#greeter-hide-users=/greeter-hide-users=false/' $CONF
+      sed -i 's/^#allow-user-switching=.*/allow-user-switching=true/' $CONF
+    fi
+    
+    CONF='/etc/lightdm/users.conf'
+    if [ -e $CONF ]; then
+      sed -i -e '/^minimum-uid=/ c minimum-uid=1000' $CONF
+    fi
+    
+    # Change Grub2 Theme
+    UPDGRUB=false
+    DEFGRUB='/etc/default/grub'
+    if [ -f "$DEFGRUB" ]; then
+      if grep -q '^GRUB_THEME=' $DEFGRUB; then
+        sed -i 's|^GRUB_THEME=.*|GRUB_THEME=/boot/grub/themes/solydxk/theme.txt|' $DEFGRUB
+        UPDGRUB=true
+      else
+        if ! grep -q 'GRUB_THEME=' $DEFGRUB; then
+          # Only append if GRUB_THEME= is not in DEFGRUB
+          echo -e '\n# Set theme\nGRUB_THEME=/boot/grub/themes/solydxk/theme.txt' >> $DEFGRUB
+          UPDGRUB=true
+        fi
+      fi
+      
+      if ! grep -q 'GRUB_DISABLE_OS_PROBER=' $DEFGRUB; then
+        # Only append if GRUB_THEME= is not in DEFGRUB
+        echo -e '\n# Disable os-prober\nGRUB_DISABLE_OS_PROBER=false' >> $DEFGRUB
+        UPDGRUB=true
+      fi
+    fi
+    
+    # Change Plymouth theme when needed
+    CONF='/etc/plymouth/plymouthd.conf'
+    if [ -e $CONF ]; then
+      CURTHEME=$(grep '^Theme' "$CONF" | awk -F'=' '{print $2}')
+      if [[ "$CURTHEME" == "$PLYMOUTH_THEME"* ]]; then
+        PLYMOUTH_THEME=$CURTHEME
+      fi
+      if grep -q "$PLYMOUTH_THEME" "$CONF"; then
+        plymouth-set-default-theme -R "$PLYMOUTH_THEME"
+        UPDGRUB=true
+      fi
+    fi
+    
+    # Update Grub2
+    if $UPDGRUB && [ -e /usr/sbin/update-grub ]; then
+      update-grub
+    fi
+    
+    GPG='/etc/skel/.gnupg'
+    if [ -e $GPG ]; then
+      chmod 700 $GPG
+    fi
+    
+    adust_trigger_files
+    install_root_files
+   
+  ;;
+
+  upgrade|update)
+  ;;
+
+  abort-upgrade|abort-remove|abort-deconfigure)
+  ;;
+
+  triggered)
+    
+    adust_trigger_files
+    
+  ;;
+
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

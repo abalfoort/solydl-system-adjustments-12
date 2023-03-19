@@ -1,0 +1,23 @@
+solydl-system-adjustments-12 (1.0.3) stable; urgency=low
+
+  * More qt5ct configuration
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Sun, 19 Mar 2023 11:30:34 +0100
+
+solydl-system-adjustments-12 (1.0.2) stable; urgency=low
+
+  * Fix start menu icon for mouse configuration
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Tue, 14 Mar 2023 09:02:47 +0100
+
+solydl-system-adjustments-12 (1.0.1) stable; urgency=low
+
+  * Add qt5ct package as dependency
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Sun, 12 Mar 2023 18:37:23 +0100
+
+solydl-system-adjustments-12 (1.0.0) stable; urgency=low
+
+  * Initial version 1.0.0
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Wed, 1 Mar 2023 09:55:00 +0100

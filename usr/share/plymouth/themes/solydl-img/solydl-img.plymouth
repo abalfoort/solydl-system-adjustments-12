@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=SolydL
+Description=SolydL Plymouth Theme - Static Image.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/solydl-img
+ScriptFile=/usr/share/plymouth/themes/solydl-img/solydl-img.script
