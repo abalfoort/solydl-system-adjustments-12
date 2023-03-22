@@ -1,3 +1,9 @@
+solydl-system-adjustments-12 (1.0.4) stable; urgency=low
+
+  * Improve root files installation
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Tue, 21 Mar 2023 11:13:58 +0100
+
 solydl-system-adjustments-12 (1.0.3) stable; urgency=low
 
   * More qt5ct configuration
