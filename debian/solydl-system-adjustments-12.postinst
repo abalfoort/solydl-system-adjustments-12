@@ -35,16 +35,21 @@ function sed_append_sting {
   fi
 }
 
+function _file_to_root {
+    cd $1
+    ROOTDIR="/root/$3"
+    mkdir -p $ROOTDIR
+    for F in $2; do
+        if [ -e "$F" ] && [ ! -e "${ROOTDIR}${F}" ]; then
+            cp -v --parents "$F" "${ROOTDIR}"
+        fi
+    done
+}
+
 function install_root_files {
-    mkdir -p /root/.config/gtk-3.0
-    mkdir -p /root/.local/share
-    
-    if [ ! -e /root/.config/gtk-3.0/settings.ini ]; then
-        cp -f /usr/share/solydxk/root_files/.config/gtk-3.0/settings.ini /root/.config/gtk-3.0/
-    fi
-    if [ ! -e /root/.gtkrc-2.0 ]; then
-        cp -f /usr/share/solydxk/root_files/.gtkrc-2.0 /root/
-    fi
+    # Copy config files to root
+    FLES='.config/fontconfig/fonts.conf gtk-3.0/settings.ini .config/pcmanfm-qt/lxqt/settings.conf .config/qterminal.org/qterminal.ini .config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml .config/lxqt-mimeapps.list .config/mimeapps.list .gtkrc-2.0'
+    _file_to_root '/etc/skel' "$FLES"
 }
 
 function adust_trigger_files {
