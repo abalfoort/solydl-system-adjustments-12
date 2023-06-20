@@ -1,3 +1,10 @@
+solydl-system-adjustments-12 (1.0.5) stable; urgency=low
+
+  * Replace xarchiver with lxqt-archiver
+  * Change xfwm title bar color
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Thu, 23 Mar 2023 15:34:16 +0100
+
 solydl-system-adjustments-12 (1.0.4) stable; urgency=low
 
   * Improve root files installation
