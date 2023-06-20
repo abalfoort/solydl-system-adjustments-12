@@ -4,6 +4,7 @@ highlight_color=#3cacec
 highlighted_text_color=#bbe6fe
 link_color=#2c6a8c
 link_visited_color=#75797f
-text_color=#ebecf2
-window_color=#31363a
-window_text_color=#ebeff2
+text_color=#eff0f1
+window_color=#2a2d32
+window_text_color=#eff0f1
+
