@@ -1,3 +1,15 @@
+solydl-system-adjustments-12 (1.0.8) stable; urgency=low
+
+  * Adjusted grub theme colors
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Wed, 28 Jun 2023 10:21:38 +0200
+
+solydl-system-adjustments-12 (1.0.7) stable; urgency=low
+
+  * Move solydl-applications.menu to /etc/xdg/menus
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Tue, 27 Jun 2023 16:05:22 +0200
+
 solydl-system-adjustments-12 (1.0.6) stable; urgency=low
 
   * Add Grub SolydK light theme (default)
