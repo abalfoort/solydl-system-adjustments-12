@@ -1,3 +1,9 @@
+solydl-system-adjustments-12 (1.1.0) stable; urgency=low
+
+  * Updated graphics
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Mon, 03 Jul 2023 15:31:38 +0200
+
 solydl-system-adjustments-12 (1.0.9) stable; urgency=low
 
   * Replace desktop-grub.png with a generic black image
