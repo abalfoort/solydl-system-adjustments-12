@@ -42,10 +42,19 @@ function remove_divert {
     fi
 }
 
+function updates-alternatives {
+    # Set default theme
+    update-alternatives --remove desktop-theme /usr/share/desktop-base/solydl-light-theme
+    update-alternatives --remove desktop-theme /usr/share/desktop-base/solydl-dark-theme
+    update-alternatives --remove desktop-theme /usr/share/desktop-base/solydl-black-theme
+    update-alternatives --auto desktop-theme
+}
+
 case "$1" in
     remove|purge)
         # Remove diversions
         remove_divert 'solydl-system-adjustments-12'
+        updates-alternatives
     ;;
     *)
     ;;
