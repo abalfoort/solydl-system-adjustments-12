@@ -1,3 +1,10 @@
+solydl-system-adjustments-12 (1.1.1) stable; urgency=low
+
+  * Updated graphics
+  * Moved themes to breeze-l-gtk-theme package
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Tue, 18 Jul 2023 16:23:59 +0200
+
 solydl-system-adjustments-12 (1.1.0) stable; urgency=low
 
   * Updated graphics
