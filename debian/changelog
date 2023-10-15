@@ -1,3 +1,9 @@
+solydl-system-adjustments-12 (1.1.5) stable; urgency=low
+
+  * Move /lib to /usr/lib
+
+ -- Arjen Balfoort <arjenbalfoort@hotmail.com>  Sat, 14 Oct 2023 12:06:22 +0200
+
 solydl-system-adjustments-12 (1.1.4) stable; urgency=low
 
   * Change light Grub theme font colors
